@@ -1,17 +1,17 @@
 # configured aws provider with proper credentials
 provider "aws" {
   region = "us-east-1"
-  profile= "yusuf"
+  profile= "chris"
 }
 
 # Create a remote backend for your terraform 
 terraform {
   backend "s3" {
-    bucket = "austinobioma-docker-tfstate"
+    bucket = "chris-docker-tfstate"
     dynamodb_table = "app-state"
     key    = "LockID"
     region = "us-east-1"
-    profile = "austinobioma-realcloud"
+    profile = "chris"
   }
 }
 
@@ -71,6 +71,39 @@ resource "aws_security_group" "ec2_security_group" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
+ingress {
+    description      = "http proxy-nginx access"
+    from_port        = 8085
+    to_port          = 8085
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+
+ingress {
+    description      = "http proxy-nginx access"
+    from_port        = 8090
+    to_port          = 8090
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+ingress {
+    description      = "http proxy-nginx access"
+    from_port        = 9000
+    to_port          = 9000
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+ingress {
+    description      = "http proxy-nginx access"
+    from_port        = 3000
+    to_port          = 3000
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
   ingress {
     description      = "http nginx access"
     from_port        = 9090
@@ -116,7 +149,7 @@ resource "aws_instance" "ec2_instance1" {
   instance_type          = "t2.micro"
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
-  key_name               = "Feb-Class"
+  key_name               = "great"
   user_data            = "${file("docker-install.sh")}"
 
   tags = {
